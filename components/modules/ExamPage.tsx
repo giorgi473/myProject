@@ -19,8 +19,6 @@ import {
   questionCategories,
   vehicleCategories,
 } from "@/constants/getdata";
-
-// შიდა ინტერფეისი ჩვენებისთვის
 interface DisplayQuestion {
   id: string;
   text: string;
@@ -29,7 +27,6 @@ interface DisplayQuestion {
   image: string;
 }
 
-// ინტერფეისი გაცემული პასუხების შესანახად
 interface AnsweredQuestion {
   questionId: string;
   selectedAnswer: string;
@@ -69,7 +66,7 @@ const ExamPage: React.FC = () => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answerSubmitted, setAnswerSubmitted] = useState<boolean>(false);
   const [isAnswerCorrect, setIsAnswerCorrect] = useState<boolean | null>(null);
-  const [timer, setTimer] = useState<number>(1800); // 30 წუთი = 1800 წამი
+  const [timer, setTimer] = useState<number>(1800);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [correctAnswersCount, setCorrectAnswersCount] = useState<number>(0);
@@ -84,7 +81,6 @@ const ExamPage: React.FC = () => {
   // Ref master checkbox-ისთვის
   const masterCheckboxRef = useRef<HTMLInputElement>(null);
 
-  // მასივის შემთხვევით გადალაგების ფუნქცია
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -94,7 +90,6 @@ const ExamPage: React.FC = () => {
     return shuffled;
   };
 
-  // ტაიმერის ეფექტი
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (
@@ -114,7 +109,7 @@ const ExamPage: React.FC = () => {
       !showSuccessModal &&
       allQuestions.length > 0
     ) {
-      setShowFailModal(true); // გამოვაჩინოთ "ვერ ჩააბარე" მოდალი მხოლოდ გამოცდის აქტიურობისას
+      setShowFailModal(true);
     }
     return () => {
       if (interval) clearInterval(interval);
@@ -129,7 +124,6 @@ const ExamPage: React.FC = () => {
       .padStart(2, "0")}`;
   };
 
-  // კატეგორიის განახლება
   useEffect(() => {
     if (selectedVehicleType && selectedVehicleType !== selectedCategory) {
       setSelectedCategory(selectedVehicleType);
@@ -138,7 +132,6 @@ const ExamPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedVehicleType]);
 
-  // გამოცდის ჩატვირთვა
   useEffect(() => {
     if (showWhitePanel && isClientLoaded) {
       loadQuestions();
@@ -146,7 +139,6 @@ const ExamPage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory, showWhitePanel, categoryCheckboxes, isClientLoaded]);
 
-  // გამოცდის მდგომარეობის განახლება
   useEffect(() => {
     if (showWhitePanel) {
       document.body.classList.add("overflow-hidden");
@@ -180,7 +172,6 @@ const ExamPage: React.FC = () => {
     };
   }, [showWhitePanel]);
 
-  // ოფციების გადალაგება
   useEffect(() => {
     if (currentQuestion && currentQuestion.options) {
       const existingAnswer = answeredQuestions.find(
@@ -202,7 +193,6 @@ const ExamPage: React.FC = () => {
     }
   }, [currentQuestion, answeredQuestions]);
 
-  // წარმატების მოდალის გამოჩენა
   useEffect(() => {
     if (
       allQuestions.length === 30 &&
@@ -224,7 +214,6 @@ const ExamPage: React.FC = () => {
     allQuestions,
   ]);
 
-  // ჩექბოქსების მდგომარეობის მონიტორინგი
   useEffect(() => {}, [categoryCheckboxes]);
 
   const selectedVehicle = vehicleCategories.find(
@@ -394,7 +383,6 @@ const ExamPage: React.FC = () => {
     const isCorrect = option === currentQuestion?.correctAnswer;
     setIsAnswerCorrect(isCorrect);
 
-    // შევინახოთ გაცემული პასუხი
     if (currentQuestion) {
       setAnsweredQuestions((prev) => [
         ...prev,
